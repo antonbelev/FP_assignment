@@ -108,48 +108,48 @@ module module_les_ocl
         character(10) :: kstr
         character(17) :: srcstr
 
-integer(8) :: p_buf
-integer(8) :: cn1_buf
-integer(8) :: rhs_buf
-integer(8) :: sm_buf
-integer(8) :: dxs_buf
-integer(8) :: dys_buf
-integer(8) :: dzs_buf
-integer(8) :: dx1_buf
-integer(8) :: dy1_buf
-integer(8) :: dzn_buf
-integer(8) :: z2_buf
-integer(8) :: uvw_buf
-integer(8) :: fgh_buf
-integer(8) :: fgh_old_buf
-integer(8) :: cov_buf
-integer(8) :: diu_buf
-integer(8) :: nou_buf
-integer(8) :: mask1_buf
-integer(8) :: cn234ls_buf
-integer(8) :: n_state_buf
+		integer(8) :: p_buf
+		integer(8) :: cn1_buf
+		integer(8) :: rhs_buf
+		integer(8) :: sm_buf
+		integer(8) :: dxs_buf
+		integer(8) :: dys_buf
+		integer(8) :: dzs_buf
+		integer(8) :: dx1_buf
+		integer(8) :: dy1_buf
+		integer(8) :: dzn_buf
+		integer(8) :: z2_buf
+		integer(8) :: uvw_buf
+		integer(8) :: fgh_buf
+		integer(8) :: fgh_old_buf
+		integer(8) :: cov_buf
+		integer(8) :: diu_buf
+		integer(8) :: nou_buf
+		integer(8) :: mask1_buf
+		integer(8) :: cn234ls_buf
+		integer(8) :: n_state_buf
 
 ! sizes
-integer, dimension(3) :: p_sz
-integer, dimension(3) :: cn1_sz
-integer, dimension(3) :: rhs_sz
-integer, dimension(3) :: sm_sz
-integer, dimension(1) :: dxs_sz
-integer, dimension(1) :: dys_sz
-integer, dimension(1) :: dzs_sz
-integer, dimension(1) :: dx1_sz
-integer, dimension(1) :: dy1_sz
-integer, dimension(1) :: dzn_sz
-integer, dimension(1) :: z2_sz
-integer, dimension(4) :: uvw_sz
-integer, dimension(4) :: fgh_sz
-integer, dimension(4) :: fgh_old_sz
-integer, dimension(4) :: cov_sz
-integer, dimension(4) :: diu_sz
-integer, dimension(4) :: nou_sz
-integer, dimension(4) :: mask1_sz
-integer, dimension(1) :: cn234ls_sz
-integer, dimension(1) :: n_state_sz
+		integer, dimension(3) :: p_sz
+		integer, dimension(3) :: cn1_sz
+		integer, dimension(3) :: rhs_sz
+		integer, dimension(3) :: sm_sz
+		integer, dimension(1) :: dxs_sz
+		integer, dimension(1) :: dys_sz
+		integer, dimension(1) :: dzs_sz
+		integer, dimension(1) :: dx1_sz
+		integer, dimension(1) :: dy1_sz
+		integer, dimension(1) :: dzn_sz
+		integer, dimension(1) :: z2_sz
+		integer, dimension(4) :: uvw_sz
+		integer, dimension(4) :: fgh_sz
+		integer, dimension(4) :: fgh_old_sz
+		integer, dimension(4) :: cov_sz
+		integer, dimension(4) :: diu_sz
+		integer, dimension(4) :: nou_sz
+		integer, dimension(4) :: mask1_sz
+		integer, dimension(1) :: cn234ls_sz
+		integer, dimension(1) :: n_state_sz
 
  ! convert to new format
         call convert_to_uvw(u,v,w,uvw)
@@ -172,98 +172,98 @@ integer, dimension(1) :: n_state_sz
         
         ! create opencl buffers
 
-p_sz = shape(p)
-cn1_sz = shape(cn1)
-rhs_sz = shape(rhs)
-sm_sz = shape(sm)
-dxs_sz = shape(dxs)
-dys_sz = shape(dys)
-dzs_sz = shape(dzs)
-dx1_sz = shape(dx1)
-dy1_sz = shape(dy1)
-dzn_sz = shape(dzn)
-z2_sz = shape(z2)
-uvw_sz = shape(uvw)
-fgh_sz = shape(fgh)
-fgh_old_sz = shape(fgh_old)
-cov_sz = shape(cov)
-diu_sz = shape(diu)
-nou_sz = shape(nou)
-mask1_sz = shape(mask1)
-cn234ls_sz = shape(cn234ls)
-n_state_sz = shape(n_state)
+		p_sz = shape(p)
+		cn1_sz = shape(cn1)
+		rhs_sz = shape(rhs)
+		sm_sz = shape(sm)
+		dxs_sz = shape(dxs)
+		dys_sz = shape(dys)
+		dzs_sz = shape(dzs)
+		dx1_sz = shape(dx1)
+		dy1_sz = shape(dy1)
+		dzn_sz = shape(dzn)
+		z2_sz = shape(z2)
+		uvw_sz = shape(uvw)
+		fgh_sz = shape(fgh)
+		fgh_old_sz = shape(fgh_old)
+		cov_sz = shape(cov)
+		diu_sz = shape(diu)
+		nou_sz = shape(nou)
+		mask1_sz = shape(mask1)
+		cn234ls_sz = shape(cn234ls)
+		n_state_sz = shape(n_state)
 
         n_state(0)=0
         n_state(1)=0
 
-call oclMake3DFloatArrayReadWriteBuffer(p_buf, p_sz, p)
-call oclMake3DFloatArrayReadWriteBuffer(cn1_buf, cn1_sz, cn1)
-call oclMake3DFloatArrayReadWriteBuffer(rhs_buf, rhs_sz, rhs)
-call oclMake3DFloatArrayReadWriteBuffer(sm_buf, sm_sz, sm)
-call oclMake1DFloatArrayReadWriteBuffer(dxs_buf, dxs_sz, dxs)
-call oclMake1DFloatArrayReadWriteBuffer(dys_buf, dys_sz, dys)
-call oclMake1DFloatArrayReadWriteBuffer(dzs_buf, dzs_sz, dzs)
-call oclMake1DFloatArrayReadWriteBuffer(dx1_buf, dx1_sz, dx1)
-call oclMake1DFloatArrayReadWriteBuffer(dy1_buf, dy1_sz, dy1)
-call oclMake1DFloatArrayReadWriteBuffer(dzn_buf, dzn_sz, dzn)
-call oclMake1DFloatArrayReadWriteBuffer(z2_buf, z2_sz, z2)
-call oclMake4DFloatArrayReadWriteBuffer(uvw_buf, uvw_sz, uvw)
-call oclMake4DFloatArrayReadWriteBuffer(fgh_buf, fgh_sz, fgh)
-call oclMake4DFloatArrayReadWriteBuffer(fgh_old_buf, fgh_old_sz, fgh_old)
-call oclMake4DFloatArrayReadWriteBuffer(cov_buf, cov_sz, cov)
-call oclMake4DFloatArrayReadWriteBuffer(diu_buf, diu_sz, diu)
-call oclMake4DFloatArrayReadWriteBuffer(nou_buf, nou_sz, nou)
-call oclMake4DFloatArrayReadWriteBuffer(mask1_buf, mask1_sz, mask1)
-call oclMake1DFloatArrayReadWriteBuffer(cn234ls_buf, cn234ls_sz, cn234ls)
-call oclMake1DIntArrayReadWriteBuffer(n_state_buf, n_state_sz, n_state)
+		call oclMake3DFloatArrayReadWriteBuffer(p_buf, p_sz, p)
+		call oclMake3DFloatArrayReadWriteBuffer(cn1_buf, cn1_sz, cn1)
+		call oclMake3DFloatArrayReadWriteBuffer(rhs_buf, rhs_sz, rhs)
+		call oclMake3DFloatArrayReadWriteBuffer(sm_buf, sm_sz, sm)
+		call oclMake1DFloatArrayReadWriteBuffer(dxs_buf, dxs_sz, dxs)
+		call oclMake1DFloatArrayReadWriteBuffer(dys_buf, dys_sz, dys)
+		call oclMake1DFloatArrayReadWriteBuffer(dzs_buf, dzs_sz, dzs)
+		call oclMake1DFloatArrayReadWriteBuffer(dx1_buf, dx1_sz, dx1)
+		call oclMake1DFloatArrayReadWriteBuffer(dy1_buf, dy1_sz, dy1)
+		call oclMake1DFloatArrayReadWriteBuffer(dzn_buf, dzn_sz, dzn)
+		call oclMake1DFloatArrayReadWriteBuffer(z2_buf, z2_sz, z2)
+		call oclMake4DFloatArrayReadWriteBuffer(uvw_buf, uvw_sz, uvw)
+		call oclMake4DFloatArrayReadWriteBuffer(fgh_buf, fgh_sz, fgh)
+		call oclMake4DFloatArrayReadWriteBuffer(fgh_old_buf, fgh_old_sz, fgh_old)
+		call oclMake4DFloatArrayReadWriteBuffer(cov_buf, cov_sz, cov)
+		call oclMake4DFloatArrayReadWriteBuffer(diu_buf, diu_sz, diu)
+		call oclMake4DFloatArrayReadWriteBuffer(nou_buf, nou_sz, nou)
+		call oclMake4DFloatArrayReadWriteBuffer(mask1_buf, mask1_sz, mask1)
+		call oclMake1DFloatArrayReadWriteBuffer(cn234ls_buf, cn234ls_sz, cn234ls)
+		call oclMake1DIntArrayReadWriteBuffer(n_state_buf, n_state_sz, n_state)
 
-call oclSetFloatArrayArg(0, p_buf )
-call oclSetFloatArrayArg(1, cn1_buf )
-call oclSetFloatArrayArg(2, rhs_buf )
-call oclSetFloatArrayArg(3, sm_buf )
-call oclSetFloatArrayArg(4, dxs_buf )
-call oclSetFloatArrayArg(5, dys_buf )
-call oclSetFloatArrayArg(6, dzs_buf )
-call oclSetFloatArrayArg(7, dx1_buf )
-call oclSetFloatArrayArg(8, dy1_buf )
-call oclSetFloatArrayArg(9, dzn_buf )
-call oclSetFloatArrayArg(10, z2_buf )
-call oclSetFloatArrayArg(11, uvw_buf )
-call oclSetFloatArrayArg(12, fgh_buf )
-call oclSetFloatArrayArg(13, fgh_old_buf )
-call oclSetFloatArrayArg(14, cov_buf )
-call oclSetFloatArrayArg(15, diu_buf )
-call oclSetFloatArrayArg(16, nou_buf )
-call oclSetFloatArrayArg(17, mask1_buf )
-call oclSetFloatArrayArg(18, cn234ls_buf )
-call oclSetIntArrayArg(19, n_state_buf )
-call oclSetFloatConstArg(20, dt )
-call oclSetIntConstArg(21, im )
-call oclSetIntConstArg(22, jm )
-call oclSetIntConstArg(23, km )
-call oclSetIntConstArg(24, nmax )
+		call oclSetFloatArrayArg(0, p_buf )
+		call oclSetFloatArrayArg(1, cn1_buf )
+		call oclSetFloatArrayArg(2, rhs_buf )
+		call oclSetFloatArrayArg(3, sm_buf )
+		call oclSetFloatArrayArg(4, dxs_buf )
+		call oclSetFloatArrayArg(5, dys_buf )
+		call oclSetFloatArrayArg(6, dzs_buf )
+		call oclSetFloatArrayArg(7, dx1_buf )
+		call oclSetFloatArrayArg(8, dy1_buf )
+		call oclSetFloatArrayArg(9, dzn_buf )
+		call oclSetFloatArrayArg(10, z2_buf )
+		call oclSetFloatArrayArg(11, uvw_buf )
+		call oclSetFloatArrayArg(12, fgh_buf )
+		call oclSetFloatArrayArg(13, fgh_old_buf )
+		call oclSetFloatArrayArg(14, cov_buf )
+		call oclSetFloatArrayArg(15, diu_buf )
+		call oclSetFloatArrayArg(16, nou_buf )
+		call oclSetFloatArrayArg(17, mask1_buf )
+		call oclSetFloatArrayArg(18, cn234ls_buf )
+		call oclSetIntArrayArg(19, n_state_buf )
+		call oclSetFloatConstArg(20, dt )
+		call oclSetIntConstArg(21, im )
+		call oclSetIntConstArg(22, jm )
+		call oclSetIntConstArg(23, km )
+		call oclSetIntConstArg(24, nmax )
     
     ! copy all arrays required for the full run
-call oclWrite3DFloatArrayBuffer(p_buf, p_sz, p)
-call oclWrite3DFloatArrayBuffer(cn1_buf, cn1_sz, cn1)
-call oclWrite3DFloatArrayBuffer(rhs_buf, rhs_sz, rhs)
-call oclWrite3DFloatArrayBuffer(sm_buf, sm_sz, sm)
-call oclWrite1DFloatArrayBuffer(dxs_buf, dxs_sz, dxs)
-call oclWrite1DFloatArrayBuffer(dys_buf, dys_sz, dys)
-call oclWrite1DFloatArrayBuffer(dzs_buf, dzs_sz, dzs)
-call oclWrite1DFloatArrayBuffer(dx1_buf, dx1_sz, dx1)
-call oclWrite1DFloatArrayBuffer(dy1_buf, dy1_sz, dy1)
-call oclWrite1DFloatArrayBuffer(dzn_buf, dzn_sz, dzn)
-call oclWrite1DFloatArrayBuffer(z2_buf, z2_sz, z2)
-call oclWrite4DFloatArrayBuffer(uvw_buf, uvw_sz, uvw)
-call oclWrite4DFloatArrayBuffer(fgh_buf, fgh_sz, fgh)
-call oclWrite4DFloatArrayBuffer(fgh_old_buf, fgh_old_sz, fgh_old)
-call oclWrite4DFloatArrayBuffer(cov_buf, cov_sz, cov)
-call oclWrite4DFloatArrayBuffer(diu_buf, diu_sz, diu)
-call oclWrite4DFloatArrayBuffer(nou_buf, nou_sz, nou)
-call oclWrite4DFloatArrayBuffer(mask1_buf, mask1_sz, mask1)
-call oclWrite1DFloatArrayBuffer(cn234ls_buf, cn234ls_sz, cn234ls)
-call oclWrite1DIntArrayBuffer(n_state_buf, n_state_sz, n_state)
+		call oclWrite3DFloatArrayBuffer(p_buf, p_sz, p)
+		call oclWrite3DFloatArrayBuffer(cn1_buf, cn1_sz, cn1)
+		call oclWrite3DFloatArrayBuffer(rhs_buf, rhs_sz, rhs)
+		call oclWrite3DFloatArrayBuffer(sm_buf, sm_sz, sm)
+		call oclWrite1DFloatArrayBuffer(dxs_buf, dxs_sz, dxs)
+		call oclWrite1DFloatArrayBuffer(dys_buf, dys_sz, dys)
+		call oclWrite1DFloatArrayBuffer(dzs_buf, dzs_sz, dzs)
+		call oclWrite1DFloatArrayBuffer(dx1_buf, dx1_sz, dx1)
+		call oclWrite1DFloatArrayBuffer(dy1_buf, dy1_sz, dy1)
+		call oclWrite1DFloatArrayBuffer(dzn_buf, dzn_sz, dzn)
+		call oclWrite1DFloatArrayBuffer(z2_buf, z2_sz, z2)
+		call oclWrite4DFloatArrayBuffer(uvw_buf, uvw_sz, uvw)
+		call oclWrite4DFloatArrayBuffer(fgh_buf, fgh_sz, fgh)
+		call oclWrite4DFloatArrayBuffer(fgh_old_buf, fgh_old_sz, fgh_old)
+		call oclWrite4DFloatArrayBuffer(cov_buf, cov_sz, cov)
+		call oclWrite4DFloatArrayBuffer(diu_buf, diu_sz, diu)
+		call oclWrite4DFloatArrayBuffer(nou_buf, nou_sz, nou)
+		call oclWrite4DFloatArrayBuffer(mask1_buf, mask1_sz, mask1)
+		call oclWrite1DFloatArrayBuffer(cn234ls_buf, cn234ls_sz, cn234ls)
+		call oclWrite1DIntArrayBuffer(n_state_buf, n_state_sz, n_state)
      
     ! following buffers are used in the loop, assign to module-level buffer array for convenience
 

@@ -101,8 +101,27 @@ add_to_vartable parDecls vt = let
 -- This takes a range expression and returns a tuple with the variable name and the 
 -- computed size
 eval_range_expr :: ArgTable -> VarTable -> String -> (String, [Integer])
-eval_range_expr ocl_args par_table var_name = ("DUMMY",[])
-       
+eval_range_expr ocl_args par_table var_name = let
+		varDecl = H.lookup var_name ocl_args
+		varDecl' = case varDecl of
+			Nothing -> dummyVarDecl
+			Just v -> v
+		ranges = vd_dimension varDecl'
+		ints = get_range_values ranges par_table
+	in (var_name, ints)
+
+get_range_values ::	[Range] -> VarTable -> [Integer]
+get_range_values [] par_table = []
+get_range_values ranges par_table = let
+	r = head ranges
+	ints = get_range_values (tail ranges) par_table
+	e1 = r_stop r; 
+	(i1,t1) = eval e1 par_table; 
+	e2 = r_start r; 
+	(i2,t2) = eval e2 t1; 
+	in ints ++ [i1 - i2];
+
+	
 -- ###############################
 main :: IO ()
 main = do 

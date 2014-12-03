@@ -38,11 +38,11 @@ gen_OpenCL_API_calls ocl_args arg_names const_arg_names src_lines templ_src_name
 	| otherwise = [head src_lines] ++ gen_OpenCL_API_calls ocl_args arg_names const_arg_names (tail src_lines) templ_src_name
 
 gen_bufdecls ::[String] -> [String]    
-gen_bufdecls arg_names = [ "integer(8) :: " ++ arg ++ "_buf" | arg <- arg_names]
+gen_bufdecls arg_names = [ "\t\tinteger(8) :: " ++ arg ++ "_buf" | arg <- arg_names]
 
 gen_sizedecls :: ArgTable -> [String] -> [String]    
 gen_sizedecls ocl_args arg_names = 
-	["integer, dimension(" ++ show (length (vd_dimension $ vardecl_lookup ocl_args arg)) 
+	["\t\tinteger, dimension(" ++ show (length (vd_dimension $ vardecl_lookup ocl_args arg)) 
 	++ ") :: " ++ arg ++ "_sz"| arg <- arg_names]
 
 vardecl_lookup :: ArgTable -> String -> VarDecl
@@ -54,10 +54,10 @@ vardecl_lookup ocl_args arg = let
 	in varDecl
 
 gen_makesizes :: ArgTable -> [String] -> [String] -> [String] -> String -> [String]    
-gen_makesizes ocl_args arg_names const_arg_names src_lines templ_src_name = [ arg ++ "_sz" ++ " = shape(" ++ arg ++ ")" | arg <- arg_names]
+gen_makesizes ocl_args arg_names const_arg_names src_lines templ_src_name = [ "\t\t" ++ arg ++ "_sz" ++ " = shape(" ++ arg ++ ")" | arg <- arg_names]
 
 gen_makebuffers :: ArgTable -> [String] -> [String]    
-gen_makebuffers ocl_args arg_names = [ "call oclMake" ++ show (length (vd_dimension (vardecl_lookup ocl_args arg) )) 
+gen_makebuffers ocl_args arg_names = [ "\t\tcall oclMake" ++ show (length (vd_dimension (vardecl_lookup ocl_args arg) )) 
 	++ "D" ++ get_c_type (vd_vartype (vardecl_lookup ocl_args arg))
 	++ "Array" ++ show (vd_argmode (vardecl_lookup ocl_args arg))
 	++ "Buffer(" ++ arg ++ "_buf, " ++ arg ++ "_sz, " ++ arg ++ ")"| arg <- arg_names]
@@ -73,7 +73,7 @@ gen_setargs_arg ocl_args [] count = ([],count)
 gen_setargs_arg ocl_args arg_names count = let 
 	arg = head arg_names
 	(r,c) = gen_setargs_arg ocl_args (tail arg_names) (count+1)
-	res' = ["call oclSet" 
+	res' = ["\t\tcall oclSet" 
 		++ get_c_type (vd_vartype (vardecl_lookup ocl_args arg))
 		++ "ArrayArg(" ++ show count ++ ", " ++ arg ++ "_buf )"] ++ r
 	in (res', c)
@@ -83,13 +83,13 @@ gen_setargs_const_arg ocl_args [] count = ([],count)
 gen_setargs_const_arg ocl_args const_arg_names count = let 
 	arg = head const_arg_names
 	(r,c) = gen_setargs_const_arg ocl_args (tail const_arg_names) (count+1)
-	res' = ["call oclSet" 
+	res' = ["\t\tcall oclSet" 
 		++ get_c_type (vd_vartype (vardecl_lookup ocl_args arg))
 		++ "ConstArg(" ++ show count ++ ", " ++ arg ++ " )"] ++ r
 	in (res', c)
 
 gen_writebuffers :: ArgTable -> [String] -> [String]    
-gen_writebuffers ocl_args arg_names = [ "call oclWrite" ++ show (length (vd_dimension (vardecl_lookup ocl_args arg) )) 
+gen_writebuffers ocl_args arg_names = [ "\t\tcall oclWrite" ++ show (length (vd_dimension (vardecl_lookup ocl_args arg) )) 
 	++ "D" ++ get_c_type (vd_vartype (vardecl_lookup ocl_args arg))
 	++ "ArrayBuffer(" ++ arg ++ "_buf, " ++ arg ++ "_sz, " ++ arg ++ ")"| arg <- arg_names]
 

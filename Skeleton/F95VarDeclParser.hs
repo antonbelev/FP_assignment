@@ -30,9 +30,7 @@ f95_var_decl_parser =
 		whiteSpace
 		intent <- try(do comma; whiteSpace; x <- intent_parser; return x) <|> (do return InOut)
 		whiteSpace
-		reserved "::"
-		whiteSpace
-		vars <- commaSep identifier
+		vars <- arglist_parser
 		whiteSpace
 		mode <- try(ocl_argmode_parser) <|> (do return $ ReadWrite)
 		return $ MkVarDecl varType ranges intent vars mode False False []
@@ -117,6 +115,9 @@ intent_parser =
 arglist_parser :: Parser [VarName]    
 arglist_parser = 
 	do
+		whiteSpace
+		string "::"
+		whiteSpace
 		args <- commaSep identifier
 		return args
 		
